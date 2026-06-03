@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     GITHUB_CLIENT_SECRET: str = ""
     GITHUB_REDIRECT_URI: str = "http://localhost:8000/auth/github/callback"
 
+    # AI Providers
+    GROQ_API_KEY: str = ""
+
     # App
     FRONTEND_URL: str = "http://localhost:5173"
     ENVIRONMENT: str = "development"
