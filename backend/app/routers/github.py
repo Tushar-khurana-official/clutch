@@ -46,3 +46,16 @@ async def sync_activity(
     service = GitHubService(current_user.github_access_token)
     synced = await service.sync_to_db(current_user, db)
     return {"message": "Sync complete", "synced_days": synced}
+
+@router.get("/repos")
+async def get_repos(
+    current_user: User = Depends(get_current_user),
+):
+    """Get user's repositories sorted by last updated."""
+    import httpx as _httpx
+    async with _httpx.AsyncClient() as client:
+        response = await client.get(
+            "https://api.github.com/user/repos?sort=updated&per_page=20",
+            headers={"Authorization": f"Bearer {current_user.github_access_token}"},
+        )
+        return response.json()
