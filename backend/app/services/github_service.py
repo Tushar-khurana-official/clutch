@@ -13,48 +13,61 @@ class GitHubService:
         }
 
     async def get_activity(self, username: str, days: int = 30) -> dict:
-        """Fetch user's GitHub events for the past N days."""
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self.BASE_URL}/users/{username}/events?per_page=100",
-                headers=self.headers,
-            )
-            events = response.json()
+        """Fetch user's GitHub contributions using GraphQL API."""
+        from datetime import datetime, timedelta, timezone
+        since = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-        # Process events into daily buckets
-        daily = {}
-        for event in events:
-            date = event["created_at"][:10]  # YYYY-MM-DD
-            if date not in daily:
-                daily[date] = {
-                    "date": date,
-                    "commits": 0,
-                    "prs": 0,
-                    "issues": 0,
-                    "reviews": 0,
-                    "repos": set(),
+        query = """
+        query($username: String!, $from: DateTime!) {
+        user(login: $username) {
+            contributionsCollection(from: $from) {
+            totalCommitContributions
+            totalPullRequestContributions
+            totalIssueContributions
+            contributionCalendar {
+                weeks {
+                contributionDays {
+                    date
+                    contributionCount
                 }
-            if event["type"] == "PushEvent":
-                daily[date]["commits"] += event["payload"].get("size", 0)
-                daily[date]["repos"].add(event["repo"]["name"])
-            elif event["type"] == "PullRequestEvent":
-                daily[date]["prs"] += 1
-            elif event["type"] == "IssuesEvent":
-                daily[date]["issues"] += 1
-            elif event["type"] == "PullRequestReviewEvent":
-                daily[date]["reviews"] += 1
+                }
+            }
+            }
+        }
+        }
+        """
 
-        # Convert sets to lists for JSON serialization
-        for day in daily.values():
-            day["repos"] = list(day["repos"])
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://api.github.com/graphql",
+                headers=self.headers,
+                json={"query": query, "variables": {"username": username, "from": since}},
+            )
+            data = response.json()
+
+        collection = data["data"]["user"]["contributionsCollection"]
+        calendar = collection["contributionCalendar"]
+
+        daily = []
+        for week in calendar["weeks"]:
+            for day in week["contributionDays"]:
+                if day["contributionCount"] > 0:
+                    daily.append({
+                        "date": day["date"],
+                        "commits": day["contributionCount"],
+                        "prs": 0,
+                        "issues": 0,
+                        "reviews": 0,
+                        "repos": [],
+                    })
 
         return {
             "username": username,
             "days": days,
-            "daily_activity": list(daily.values()),
-            "total_commits": sum(d["commits"] for d in daily.values()),
-            "total_prs": sum(d["prs"] for d in daily.values()),
-            "total_issues": sum(d["issues"] for d in daily.values()),
+            "daily_activity": daily,
+            "total_commits": collection["totalCommitContributions"],
+            "total_prs": collection["totalPullRequestContributions"],
+            "total_issues": collection["totalIssueContributions"],
             "active_days": len(daily),
         }
 
