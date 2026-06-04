@@ -70,21 +70,11 @@ export default function Landing() {
         </p>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          
-            href={`${API_URL}/auth/github`}
-            className="btn-primary"
-            style={{ fontSize: '15px', padding: '10px 20px' }}
-          >
+          <a href={`${API_URL}/auth/github`} className="btn-primary" style={{ fontSize: '15px', padding: '10px 20px' }}>
             <GitBranch size={16} />
             Get Started Free
           </a>
-          
-            href="https://github.com/laypatel13/clutch"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost"
-            style={{ fontSize: '15px', padding: '10px 20px' }}
-          >
+          <a href="https://github.com/laypatel13/clutch" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: '15px', padding: '10px 20px' }}>
             View on GitHub
           </a>
         </div>
@@ -157,12 +147,7 @@ export default function Landing() {
         fontFamily: 'var(--font-mono)',
       }}>
         <span>© 2026 Clutch — Open Source</span>
-        
-          href="https://github.com/laypatel13/clutch"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}
-        >
+        <a href="https://github.com/laypatel13/clutch" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-text-muted)', textDecoration: 'none' }}>
           Star on GitHub ⭐
         </a>
       </footer>
