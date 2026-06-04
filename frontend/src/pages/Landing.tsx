@@ -1,4 +1,4 @@
-import { Github, GitCommit, BarChart3, Brain } from 'lucide-react'
+import { GitBranch, GitCommit, BarChart3, Brain } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { Navigate } from 'react-router-dom'
 
@@ -23,7 +23,7 @@ export default function Landing() {
           <span style={{ fontSize: '18px', fontWeight: '600' }}>⚡ Clutch</span>
         </div>
         <a href={`${API_URL}/auth/github`} className="btn-primary">
-          <Github size={15} />
+          <GitBranch size={15} />
           Sign in with GitHub
         </a>
       </nav>
@@ -70,8 +70,12 @@ export default function Landing() {
         </p>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <a href={`${API_URL}/auth/github`} className="btn-primary" style={{ fontSize: '15px', padding: '10px 20px' }}>
-            <Github size={16} />
+          
+            href={`${API_URL}/auth/github`}
+            className="btn-primary"
+            style={{ fontSize: '15px', padding: '10px 20px' }}
+          >
+            <GitBranch size={16} />
             Get Started Free
           </a>
           
