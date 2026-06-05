@@ -1,6 +1,6 @@
-# Contributing to Clutch..!
+# Contributing to Clutch
 
-Thanks for wanting to contribute! Clutch is an open source developer activity dashboard and we welcome contributions of all kinds.
+Thanks for wanting to contribute. Clutch is an open source developer activity dashboard and all contributions are welcome.
 
 ---
 
@@ -24,23 +24,22 @@ Thanks for wanting to contribute! Clutch is an open source developer activity da
 
 ## Commit Convention
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+We use [Conventional Commits](https://www.conventionalcommits.org/). Write the full word, not abbreviations:
 ```
-
-feat(scope): add wakatime integration
+feature(scope): add wakatime integration
 fix(scope): correct streak calculation on day boundaries
 docs(scope): update setup instructions
 chore(scope): bump dependencies
 test(scope): add github service unit tests
-
 ```
+
 ---
 
 ## Code Style
 
-- **Python** — PEP8, type hints where possible
-- **TypeScript** — strict mode, functional components, hooks
-- **CSS** — Tailwind utility classes only
+- Python — PEP8, type hints where possible
+- TypeScript — strict mode, functional components, hooks
+- CSS — use the existing CSS variables in `index.css`, avoid hardcoded values
 
 ---
 
@@ -55,4 +54,4 @@ test(scope): add github service unit tests
 
 ## Questions?
 
-Open a discussion or issue on GitHub. Happy to help!
+Open a discussion or issue on GitHub.
