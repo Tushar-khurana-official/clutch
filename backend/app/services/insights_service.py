@@ -81,41 +81,61 @@ Keep it casual and human, not corporate.
             "generated_by": "groq/llama-3.1-8b-instant",
         }
 
-    async def detect_patterns(self, user: User, db: Session) -> dict:
-        """Detect coding patterns from historical activity data."""
+    async def detect_patterns(self, user, db) -> dict:
+        """Detect coding patterns from GitHub activity."""
+        from app.models.activity import DailyActivity
+        from app.services.github_service import GitHubService
+
+        # Try DB first
         activities = (
             db.query(DailyActivity)
             .filter(DailyActivity.user_id == user.id)
             .all()
         )
 
-        if not activities:
+        # If not enough DB data, fetch live from GitHub
+        if len(activities) < 5:
+            service = GitHubService(user.github_access_token)
+            live = await service.get_activity(user.username, days=90)
+            daily_data = live["daily_activity"]
+        else:
+            daily_data = [
+                {
+                    "date": str(a.date),
+                    "commits": a.commits,
+                    "repos": a.repos_contributed or [],
+                }
+                for a in activities
+            ]
+
+        if not daily_data:
             return {"message": "Not enough data yet. Sync your GitHub first."}
 
         # Day of week analysis
         day_names = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         day_commits = {i: 0 for i in range(7)}
-        for activity in activities:
-            if activity.commits > 0:
-                day_commits[activity.date.weekday()] += activity.commits
+
+        from datetime import datetime
+        for day in daily_data:
+            if day["commits"] > 0:
+                try:
+                    date_obj = datetime.strptime(day["date"], "%Y-%m-%d")
+                    day_commits[date_obj.weekday()] += day["commits"]
+                except Exception:
+                    continue
 
         best_day_index = max(day_commits, key=day_commits.get)
         worst_day_index = min(day_commits, key=day_commits.get)
 
-        # Consistency score
-        active_days = len([a for a in activities if a.commits > 0])
-        consistency_score = round((active_days / max(len(activities), 1)) * 100, 1)
+        active_days = len([d for d in daily_data if d["commits"] > 0])
+        consistency_score = round((active_days / max(len(daily_data), 1)) * 100, 1)
+        avg_daily_commits = round(sum(d["commits"] for d in daily_data) / max(len(daily_data), 1), 2)
 
-        # Average daily commits
-        avg_daily_commits = round(
-            sum(a.commits for a in activities) / max(len(activities), 1), 2
-        )
-
-        # Most contributed repos
+        # Top repos
         all_repos = []
-        for activity in activities:
-            if activity.repos_contributed:
-                all_repos.extend(activity.repos_contributed)
+        for day in daily_data:
+            if day.get("repos"):
+                all_repos.extend(day["repos"])
 
         repo_counts = {}
         for repo in all_repos:
@@ -126,10 +146,9 @@ Keep it casual and human, not corporate.
         return {
             "best_day": day_names[best_day_index],
             "worst_day": day_names[worst_day_index],
-            "day_distribution": {
-                day_names[i]: day_commits[i] for i in range(7)
-            },
+            "day_distribution": {day_names[i]: day_commits[i] for i in range(7)},
             "consistency_score": consistency_score,
             "avg_daily_commits": avg_daily_commits,
             "top_repos": [{"repo": r, "days_active": c} for r, c in top_repos],
+            "total_active_days": active_days,
         }
