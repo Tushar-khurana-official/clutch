@@ -202,6 +202,29 @@ clutch insight
 clutch repos
 clutch patterns
 ```
+after running this command:
+```
+clutch auth login
+```
+
+It will ask you for a jwt token to get that try doing this:
+
+>The JWT token appears in the URL like this:
+```
+https://clutch-laypatel.netlify.app/auth/callback?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+```
+
+or you can open console too if you dont get it in URL
+
+>while being on the page that you got redirected to press:
+```
+Command + Option + J (Mac)
+Control + Shift + J (Windows)
+```
+
+feed that token back to terminal and you will be logged in.
+<h5>Really sorry for the inconvenience in this one. I was not able to manage it all in 6 days.</h5>
 
 ---
 
