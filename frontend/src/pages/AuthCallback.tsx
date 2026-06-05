@@ -20,7 +20,7 @@ export default function AuthCallback() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '12px', background: 'var(--bg)' }}>
-      <span style={{ fontSize: '28px' }}>⚡</span>
+      <span style={{ fontSize: '24px' }}>◉</span>
       <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>Authenticating...</p>
     </div>
   )

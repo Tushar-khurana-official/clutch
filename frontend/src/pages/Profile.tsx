@@ -39,10 +39,10 @@ export default function Profile() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <nav style={{ borderBottom: '1px solid var(--border)', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>⚡</span>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '16px' }}>◉</span>
           <span style={{ fontWeight: '600', fontSize: '15px' }}>Clutch</span>
-        </div>
+        </a>
         <a href="/dashboard" style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none', fontFamily: 'var(--font-mono)' }}>← Back to Dashboard</a>
       </nav>
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '60px 32px' }}>

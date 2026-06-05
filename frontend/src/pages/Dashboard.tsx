@@ -56,7 +56,7 @@ export default function Dashboard() {
 
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', flexDirection: 'column', gap: '12px' }}>
-      <span style={{ fontSize: '28px' }}>⚡</span>
+      <span style={{ fontSize: '24px' }}>◉</span>
       <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>Loading your activity...</p>
     </div>
   )
@@ -64,20 +64,20 @@ export default function Dashboard() {
   const chartData = activity?.daily_activity?.sort((a, b) => a.date.localeCompare(b.date))?.slice(-14)?.map(d => ({ date: d.date.slice(5), commits: d.commits })) || []
 
   const stats = [
-    { label: 'Total Commits', value: activity?.total_commits ?? '—', icon: <GitCommit size={15} />, color: 'var(--accent-orange)' },
+    { label: 'Total Commits', value: activity?.total_commits ?? '—', icon: <GitCommit size={15} />, color: 'var(--accent-blue)' },
     { label: 'Pull Requests', value: activity?.total_prs ?? '—', icon: <GitPullRequest size={15} />, color: 'var(--accent-blue)' },
-    { label: 'Current Streak', value: streak ? `${streak.current_streak}d` : '—', icon: <Flame size={15} />, color: 'var(--accent-red)' },
-    { label: 'Longest Streak', value: streak ? `${streak.longest_streak}d` : '—', icon: <BarChart3 size={15} />, color: 'var(--accent-purple)' },
+    { label: 'Current Streak', value: streak ? `${streak.current_streak}d` : '—', icon: <Flame size={15} />, color: 'var(--accent-orange)' },
+    { label: 'Longest Streak', value: streak ? `${streak.longest_streak}d` : '—', icon: <BarChart3 size={15} />, color: 'var(--text-secondary)' },
     { label: 'Active Days', value: streak?.total_active_days ?? '—', icon: <Calendar size={15} />, color: 'var(--accent-green)' },
   ]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <nav style={{ borderBottom: '1px solid var(--border)', padding: '12px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', zIndex: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '18px' }}>⚡</span>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '16px' }}>◉</span>
           <span style={{ fontWeight: '600', fontSize: '15px' }}>Clutch</span>
-        </div>
+        </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button onClick={handleSync} disabled={syncing} className="btn-ghost" style={{ fontSize: '13px', padding: '6px 12px' }}>
             <RefreshCw size={13} style={{ animation: syncing ? 'spin 1s linear infinite' : 'none' }} />
@@ -120,8 +120,8 @@ export default function Dashboard() {
               <BarChart data={chartData} barSize={14}>
                 <XAxis dataKey="date" tick={{ fontSize: 11, fill: 'var(--text-muted)', fontFamily: 'DM Mono' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'DM Mono', fontSize: '12px' }} labelStyle={{ color: 'var(--text-secondary)' }} itemStyle={{ color: 'var(--accent-orange)' }} />
-                <Bar dataKey="commits" fill="var(--accent-orange)" radius={[3, 3, 0, 0]} />
+                <Tooltip contentStyle={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'DM Mono', fontSize: '12px' }} labelStyle={{ color: 'var(--text-secondary)' }} itemStyle={{ color: 'var(--text-primary)' }} />
+                <Bar dataKey="commits" fill="var(--text-primary)" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -129,9 +129,9 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="card" style={{ borderLeft: '3px solid var(--accent-purple)' }}>
+        <div className="card" style={{ borderLeft: '2px solid var(--border-strong)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <Brain size={15} color="var(--accent-purple)" />
+            <Brain size={15} color="var(--text-secondary)" />
             <span style={{ fontSize: '14px', fontWeight: '600' }}>Weekly AI Insight</span>
             <span className="badge badge-blue" style={{ marginLeft: 'auto', fontSize: '11px' }}>Groq AI</span>
           </div>

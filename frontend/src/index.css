@@ -1,15 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
 
-
 @import "tailwindcss";
-
 
 :root {
   --bg: #ffffff;
   --bg-secondary: #f7f6f3;
   --bg-hover: #f1f0ed;
-  --border: #e8e7e3;
-  --border-strong: #d3d1cb;
+  --border: #d8d7d3;
+  --border-strong: #b8b7b3;
   --text-primary: #1a1a1a;
   --text-secondary: #6b6b6b;
   --text-muted: #a0a0a0;
@@ -101,9 +99,9 @@ body {
   font-weight: 500;
 }
 
-.badge-blue { background: rgba(35,131,226,0.1); color: var(--accent-blue); }
-.badge-green { background: rgba(15,153,96,0.1); color: var(--accent-green); }
-.badge-orange { background: rgba(217,115,13,0.1); color: var(--accent-orange); }
+.badge-blue { background: rgba(35,131,226,0.08); color: var(--accent-blue); border: 1px solid rgba(35,131,226,0.15); }
+.badge-green { background: rgba(15,153,96,0.08); color: var(--accent-green); border: 1px solid rgba(15,153,96,0.15); }
+.badge-orange { background: rgba(217,115,13,0.08); color: var(--accent-orange); border: 1px solid rgba(217,115,13,0.15); }
 
 .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 

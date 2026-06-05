@@ -11,10 +11,10 @@ export default function Landing() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
       <nav style={{ borderBottom: '1px solid var(--border)', padding: '14px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', zIndex: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '20px' }}>⚡</span>
-          <span style={{ fontWeight: '600', fontSize: '16px', color: 'var(--text-primary)' }}>Clutch</span>
-        </div>
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '16px' }}>◉</span>
+          <span style={{ fontWeight: '600', fontSize: '16px' }}>Clutch</span>
+        </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <a href="https://github.com/laypatel13/clutch" target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: '13px', padding: '6px 12px' }}>GitHub</a>
           <a href={`${API_URL}/auth/github`} className="btn-primary" style={{ fontSize: '13px', padding: '6px 14px' }}>
@@ -51,9 +51,9 @@ export default function Landing() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', marginTop: '0', width: '100%', maxWidth: '800px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
           {[
-            { icon: <GitCommit size={18} color="var(--accent-orange)" />, title: 'Commit Streaks', desc: 'Track your daily consistency and never lose your streak again.' },
-            { icon: <BarChart3 size={18} color="var(--accent-blue)" />, title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.' },
-            { icon: <Brain size={18} color="var(--accent-purple)" />, title: 'AI Insights', desc: 'Weekly summaries powered by Groq that actually tell you something useful.' },
+            { icon: <GitCommit size={16} color="var(--accent-blue)" />, title: 'Commit Streaks', desc: 'Track your daily consistency and never lose your streak again.' },
+            { icon: <BarChart3 size={16} color="var(--accent-green)" />, title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.' },
+            { icon: <Brain size={16} color="var(--text-secondary)" />, title: 'AI Insights', desc: 'Weekly summaries powered by Groq that actually tell you something useful.' },
           ].map((f) => (
             <div key={f.title} style={{ background: 'var(--bg)', padding: '28px 24px', textAlign: 'left' }}>
               <div style={{ marginBottom: '12px' }}>{f.icon}</div>
@@ -66,8 +66,8 @@ export default function Landing() {
         <div style={{ marginTop: '48px', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '8px', padding: '20px 28px', maxWidth: '800px', width: '100%', textAlign: 'left' }}>
           <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Also available as a CLI</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {['$ pip install clutch-dev', '$ clutch streak', '🔥 Current Streak: 6 days', '$ clutch insight', '🧠 Strong week — 61 commits across 6 days...'].map((line, i) => (
-              <p key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: line.startsWith('$') ? 'var(--text-primary)' : line.startsWith('🔥') || line.startsWith('🧠') ? 'var(--accent-green)' : 'var(--text-secondary)' }}>{line}</p>
+            {['$ pip install clutch-dev', '$ clutch streak', '◉ Current Streak: 6 days', '$ clutch insight', '◉ Strong week — 61 commits across 6 days...'].map((line, i) => (
+              <p key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: line.startsWith('$') ? 'var(--text-primary)' : line.startsWith('◉') ? 'var(--accent-green)' : 'var(--text-secondary)' }}>{line}</p>
             ))}
           </div>
         </div>
