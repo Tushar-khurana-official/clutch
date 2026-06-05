@@ -4,8 +4,7 @@ from pathlib import Path
 
 CONFIG_DIR = Path.home() / ".clutch"
 CONFIG_FILE = CONFIG_DIR / "config.json"
-API_BASE_URL = os.getenv("CLUTCH_API_URL", "https://api.clutch.dev")
-
+API_BASE_URL = os.getenv("CLUTCH_API_URL", "https://clutch-api-7lw4.onrender.com")
 
 def save_token(token: str, username: str) -> None:
     """Save auth token to local config file."""
