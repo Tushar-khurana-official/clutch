@@ -12,35 +12,59 @@ export default function UserProfilePage() {
   const [notFound, setNotFound] = useState(false)
 
   useEffect(() => {
-    httpClient.get(`/users/${username}`).then(res => setProfile(res.data)).catch(() => setNotFound(true))
+    httpClient.get(`/users/${username}`).then(r => setProfile(r.data)).catch(() => setNotFound(true))
   }, [username])
 
   if (notFound) return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '8px', background: 'var(--bg)' }}>
-      <p style={{ fontSize: '18px', fontWeight: '500', color: 'var(--text-primary)' }}>User not found</p>
-      <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>@{username} doesn't exist or has a private profile.</p>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '12px', background: 'var(--bg)' }}>
+      <div className="pixel-heading pixel-heading-pink" style={{ fontSize: '12px' }}>404</div>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-muted)' }}>@{username} NOT FOUND OR PROFILE IS PRIVATE</p>
     </div>
   )
 
-  if (!profile) return <LoadingScreen />
+  if (!profile) return <LoadingScreen message="LOADING PROFILE..." />
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <div className="scanlines" />
       <NavigationBar rightContent={
-        <a href="/dashboard" style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none', fontFamily: 'var(--font-mono)' }}>← Back to Dashboard</a>
+        <a href="/dashboard" className="btn-cyan" style={{ fontSize: '10px', padding: '6px 14px' }}>← DASHBOARD</a>
       } />
 
-      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '60px 32px' }}>
-        <div className="card" style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
-          <img src={profile.avatar_url || ''} alt={profile.username} style={{ width: '72px', height: '72px', borderRadius: '50%', border: '1px solid var(--border)', flexShrink: 0 }} />
-          <div style={{ flex: 1 }}>
-            <h1 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '2px', letterSpacing: '-0.3px', color: 'var(--text-primary)' }}>{profile.name || profile.username}</h1>
-            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '12px', marginBottom: '10px' }}>@{profile.username}</p>
-            {profile.bio && <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '14px', lineHeight: '1.6' }}>{profile.bio}</p>}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', color: 'var(--text-muted)', fontSize: '12px', flexWrap: 'wrap' }}>
-              {profile.location && <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><MapPin size={12} />{profile.location}</span>}
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Users size={12} />{profile.followers} followers</span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><BookOpen size={12} />{profile.public_repos} repos</span>
+      <div style={{ maxWidth: '640px', margin: '0 auto', padding: '48px 28px' }}>
+        <div className="panel panel-cyan" style={{ padding: '28px' }}>
+          <div className="panel-label">USER PROFILE</div>
+          <div style={{ paddingTop: '20px', display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+            <img
+              src={profile.avatar_url || ''}
+              alt={profile.username}
+              style={{ width: '72px', height: '72px', border: '2px solid var(--neon-cyan)', flexShrink: 0 }}
+            />
+            <div style={{ flex: 1 }}>
+              <h1 style={{ fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: '22px', marginBottom: '2px', color: 'var(--text-primary)' }}>
+                {profile.name || profile.username}
+              </h1>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--neon-cyan)', marginBottom: '12px', letterSpacing: '0.1em' }}>
+                @{profile.username}
+              </p>
+              {profile.bio && (
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px', lineHeight: 1.8 }}>
+                  {'>'} {profile.bio}
+                </p>
+              )}
+              <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                {profile.location && (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
+                    <MapPin size={12} color="var(--neon-yellow)" />{profile.location}
+                  </span>
+                )}
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <Users size={12} color="var(--neon-pink)" />{profile.followers} FOLLOWERS
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  <BookOpen size={12} color="var(--neon-cyan)" />{profile.public_repos} REPOS
+                </span>
+              </div>
             </div>
           </div>
         </div>

@@ -1,87 +1,122 @@
-import { GitBranch, GitCommit, BarChart3, Brain, ArrowRight } from 'lucide-react'
+import { GitBranch, Terminal, Zap, Activity } from 'lucide-react'
 import { useAuthentication } from '../hooks/useAuthentication'
 import { Navigate } from 'react-router-dom'
 import NavigationBar from '../components/layout/NavigationBar'
+import TickerStrip from '../components/common/TickerStrip'
 import { API_BASE_URL, GITHUB_REPOSITORY_URL } from '../constants/config.constants'
+
+const TICKER_ITEMS = ['COMMIT STREAKS', 'AI INSIGHTS', 'ACTIVITY HEATMAP', 'GITHUB OAUTH', 'OPEN SOURCE', 'GROQ POWERED', 'WAKATIME COMING SOON']
 
 export default function LandingPage() {
   const { user } = useAuthentication()
   if (user) return <Navigate to="/dashboard" replace />
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
+      <div className="scanlines" />
+
       <NavigationBar rightContent={
         <>
-          <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: '13px', padding: '6px 12px' }}>GitHub</a>
-          <a href={`${API_BASE_URL}/auth/github`} className="btn-primary" style={{ fontSize: '13px', padding: '6px 14px' }}>
-            <GitBranch size={14} />
-            Sign in with GitHub
-          </a>
+          <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-yellow" style={{ fontSize: '10px', padding: '6px 14px' }}>★ STAR</a>
+          <a href={`${API_BASE_URL}/auth/github`} className="btn-cyan" style={{ fontSize: '10px', padding: '6px 14px' }}>▶ CONNECT GITHUB</a>
         </>
       } />
 
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 32px 80px', textAlign: 'center' }}>
+      <TickerStrip items={TICKER_ITEMS} />
 
-        <div className="badge badge-default" style={{ marginBottom: '28px' }}>Open Source · Free Forever</div>
+      {/* HERO */}
+      <main style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '60px 28px', alignItems: 'center' }}>
 
-        <h1 style={{ fontSize: '56px', fontWeight: '600', lineHeight: '1.1', letterSpacing: '-1.5px', color: 'var(--text-primary)', marginBottom: '20px', maxWidth: '680px' }}>
-          GitHub tracks your work.
-          <br />
-          Clutch tracks you.
-        </h1>
+        {/* LEFT */}
+        <div style={{ paddingRight: '48px' }}>
+          <div className="status-pill status-online" style={{ marginBottom: '24px', display: 'inline-block' }}>SYSTEM ACTIVE</div>
 
-        <p style={{ fontSize: '17px', color: 'var(--text-secondary)', maxWidth: '440px', marginBottom: '36px', lineHeight: '1.7', fontWeight: '300' }}>
-          Commit streaks, activity patterns, language breakdowns, and AI-powered weekly insights — all in one place.
-        </p>
+          <h1 className="pixel-heading pixel-heading-cyan" style={{ fontSize: '20px', marginBottom: '8px', lineHeight: 1.8 }}>
+            CLUTCH
+          </h1>
+          <h2 className="pixel-heading pixel-heading-pink" style={{ fontSize: '13px', marginBottom: '28px', lineHeight: 1.8 }}>
+            DEV ACTIVITY DASHBOARD
+          </h2>
 
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '16px' }}>
-          <a href={`${API_BASE_URL}/auth/github`} className="btn-primary" style={{ fontSize: '14px', padding: '10px 22px' }}>
-            <GitBranch size={15} />
-            Get Started Free
-            <ArrowRight size={13} />
-          </a>
-          <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ fontSize: '14px', padding: '10px 20px' }}>View on GitHub</a>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginBottom: '32px' }}>
+            {'>'} Track commit streaks<br />
+            {'>'} Visualize your activity<br />
+            {'>'} Get AI-powered weekly insights<br />
+            {'>'} CLI + Web + Open Source
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <a href={`${API_BASE_URL}/auth/github`} className="btn-cyan">
+              <GitBranch size={13} /> {'>'} CONNECT GITHUB
+            </a>
+            <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-pink">
+              <Terminal size={13} /> VIEW SOURCE
+            </a>
+          </div>
+
+          <div style={{ marginTop: '32px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
+            $ pip install clutch-dev &nbsp;<span style={{ color: 'var(--neon-green)' }}>✓ FREE FOREVER</span>
+          </div>
         </div>
 
-        <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>No credit card. No email required.</p>
-
-        <div style={{ width: '100%', maxWidth: '800px', margin: '72px auto 0', borderTop: '1px solid var(--border)' }} />
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', marginTop: '0', width: '100%', maxWidth: '800px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
+        {/* RIGHT — terminal panel */}
+        <div className="terminal">
+          <div className="terminal-bar">
+            <div className="terminal-dot" style={{ background: 'var(--neon-pink)' }} />
+            <div className="terminal-dot" style={{ background: 'var(--neon-yellow)' }} />
+            <div className="terminal-dot" style={{ background: 'var(--neon-green)' }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)', marginLeft: '8px' }}>clutch — terminal</span>
+          </div>
           {[
-            { icon: <GitCommit size={16} color="var(--text-secondary)" />, title: 'Commit Streaks', desc: 'Track your daily consistency and never lose your streak again.' },
-            { icon: <BarChart3 size={16} color="var(--text-secondary)" />, title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.' },
-            { icon: <Brain size={16} color="var(--text-secondary)" />, title: 'AI Insights', desc: 'Weekly summaries powered by Groq that actually tell you something useful.' },
-          ].map((f) => (
-            <div key={f.title} style={{ background: 'var(--bg-card)', padding: '28px 24px', textAlign: 'left' }}>
-              <div style={{ marginBottom: '12px' }}>{f.icon}</div>
-              <h3 style={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>{f.title}</h3>
-              <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{f.desc}</p>
+            { type: 'cmd', text: '$ clutch streak' },
+            { type: 'out', text: '◆ Current Streak: 12 days 🔥' },
+            { type: 'out', text: '◆ Longest Streak: 24 days' },
+            { type: 'cmd', text: '$ clutch insight' },
+            { type: 'out', text: '◆ Strong week — 47 commits' },
+            { type: 'comment', text: '  Most active: Tuesday' },
+            { type: 'comment', text: '  Top repo: clutch' },
+            { type: 'cmd', text: '$ clutch stats --days 30' },
+            { type: 'out', text: '◆ 183 commits · 12 PRs' },
+            { type: 'out', text: '◆ 28 active days / 30' },
+          ].map((line, i) => (
+            <div key={i} className="terminal-line">
+              <span className={line.type}>{line.text}</span>
             </div>
           ))}
-        </div>
-
-        <div style={{ marginTop: '1px', width: '100%', maxWidth: '800px', background: 'var(--border)', borderRadius: '0 0 8px 8px', overflow: 'hidden' }}>
-          <div style={{ background: 'var(--bg-secondary)', padding: '20px 28px', textAlign: 'left' }}>
-            <p style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Also available as a CLI</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {[
-                '$ pip install clutch-dev',
-                '$ clutch streak',
-                '◉ Current Streak: 6 days',
-                '$ clutch insight',
-                '◉ Strong week — 61 commits across 6 days...',
-              ].map((line, i) => (
-                <p key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: line.startsWith('$') ? 'var(--text-primary)' : line.startsWith('◉') ? 'var(--text-secondary)' : 'var(--text-muted)' }}>{line}</p>
-              ))}
-            </div>
+          <div className="terminal-line">
+            <span className="cmd">$ <span className="blink">_</span></span>
           </div>
         </div>
       </main>
 
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '18px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'var(--text-muted)', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
-        <span>© 2026 Clutch — Open Source</span>
-        <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Star on GitHub ⭐</a>
+      <hr className="cyber-divider" style={{ margin: '0 28px' }} />
+
+      {/* FEATURES */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '48px 28px' }}>
+        <h3 className="pixel-heading pixel-heading-yellow" style={{ fontSize: '10px', marginBottom: '32px', letterSpacing: '0.2em' }}>// FEATURES</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--border)' }}>
+          {[
+            { icon: <Activity size={16} color="var(--neon-cyan)" />, label: 'STREAKS', title: 'Commit Streaks', desc: 'Track daily consistency. Never lose your streak again.', color: 'var(--neon-cyan)' },
+            { icon: <Zap size={16} color="var(--neon-pink)" />, label: 'PATTERNS', title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.', color: 'var(--neon-pink)' },
+            { icon: <Terminal size={16} color="var(--neon-yellow)" />, label: 'AI INSIGHTS', title: 'Weekly Insights', desc: 'AI summaries powered by Groq that actually tell you something.', color: 'var(--neon-yellow)' },
+          ].map((f) => (
+            <div key={f.label} className="panel" style={{ padding: '24px', borderColor: 'var(--border)', background: 'var(--bg-card)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                {f.icon}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: f.color, letterSpacing: '0.12em' }}>{f.label}</span>
+              </div>
+              <h4 style={{ fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: '16px', marginBottom: '8px', color: 'var(--text-primary)' }}>{f.title}</h4>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.8 }}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <TickerStrip items={['OPEN SOURCE', 'MIT LICENSE', 'SELF HOSTABLE', 'FASTAPI BACKEND', 'REACT FRONTEND', 'TYPER CLI', 'GROQ AI']} />
+
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '16px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>© 2026 CLUTCH — OPEN SOURCE</span>
+        <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--neon-cyan)', textDecoration: 'none' }}>GITHUB ↗</a>
       </footer>
     </div>
   )

@@ -3,17 +3,26 @@ import type { ReactNode } from 'react'
 interface StatCardProps {
   label: string
   value: string | number
-  icon: ReactNode
+  icon?: ReactNode
+  color?: 'cyan' | 'pink' | 'yellow' | 'green'
 }
 
-export default function StatCard({ label, value, icon }: StatCardProps) {
+const colorMap = {
+  cyan: 'var(--neon-cyan)',
+  pink: 'var(--neon-pink)',
+  yellow: 'var(--neon-yellow)',
+  green: 'var(--neon-green)',
+}
+
+export default function StatCard({ label, value, icon, color = 'cyan' }: StatCardProps) {
+  const accent = colorMap[color]
   return (
-    <div style={{ background: 'var(--bg-card)', padding: '18px 16px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '10px', color: 'var(--text-muted)' }}>
+    <div className="stat-chip" style={{ borderLeft: `2px solid ${accent}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: 'var(--text-muted)' }}>
         {icon}
-        <span style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>{label}</span>
       </div>
-      <div style={{ fontSize: '24px', fontWeight: '600', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>{value}</div>
+      <div style={{ fontFamily: 'var(--font-pixel)', fontSize: '14px', color: accent, letterSpacing: '0.05em' }}>{value}</div>
     </div>
   )
 }

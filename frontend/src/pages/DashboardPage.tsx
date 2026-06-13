@@ -6,6 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import NavigationBar from '../components/layout/NavigationBar'
 import StatCard from '../components/common/StatCard'
 import LoadingScreen from '../components/common/LoadingScreen'
+import TickerStrip from '../components/common/TickerStrip'
 import type { ActivitySummary, StreakSummary, WeeklyInsight } from '../types/dashboard.types'
 
 export default function DashboardPage() {
@@ -27,8 +28,8 @@ export default function DashboardPage() {
       ])
       setActivity(activityRes.data)
       setStreak(streakRes.data)
-      httpClient.get('/insights/weekly').then(res => setInsight(res.data)).catch(() => {})
-    } catch (err) { console.error(err) }
+      httpClient.get('/insights/weekly').then(r => setInsight(r.data)).catch(() => {})
+    } catch (e) { console.error(e) }
     finally { setLoading(false) }
   }
 
@@ -39,99 +40,114 @@ export default function DashboardPage() {
     setSyncing(false)
   }
 
-  if (loading) return <LoadingScreen message="Loading your activity..." />
+  if (loading) return <LoadingScreen message="LOADING ACTIVITY DATA..." />
 
   const chartData = activity?.daily_activity
     ?.sort((a, b) => a.date.localeCompare(b.date))
     ?.slice(-14)
     ?.map(d => ({ date: d.date.slice(5), commits: d.commits })) || []
 
-  const stats = [
-    { label: 'Commits', value: activity?.total_commits ?? '—', icon: <GitCommit size={14} /> },
-    { label: 'Pull Requests', value: activity?.total_prs ?? '—', icon: <GitPullRequest size={14} /> },
-    { label: 'Current Streak', value: streak ? `${streak.current_streak}d` : '—', icon: <Flame size={14} /> },
-    { label: 'Longest Streak', value: streak ? `${streak.longest_streak}d` : '—', icon: <BarChart3 size={14} /> },
-    { label: 'Active Days', value: streak?.total_active_days ?? '—', icon: <Calendar size={14} /> },
+  const tickerItems = [
+    `@${user?.username}`,
+    `${activity?.total_commits ?? 0} COMMITS`,
+    `${streak?.current_streak ?? 0} DAY STREAK`,
+    `${activity?.active_days ?? 0} ACTIVE DAYS`,
+    `${activity?.total_prs ?? 0} PULL REQUESTS`,
   ]
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <div className="scanlines" />
+
       <NavigationBar rightContent={
         <>
-          <button onClick={handleSync} disabled={syncing} className="btn-ghost" style={{ fontSize: '13px', padding: '6px 12px' }}>
+          <button onClick={handleSync} disabled={syncing} className="btn-cyan" style={{ fontSize: '10px', padding: '6px 14px' }}>
             <RefreshCw size={12} style={{ animation: syncing ? 'spin 1s linear infinite' : 'none' }} />
-            {syncing ? 'Syncing...' : 'Sync'}
+            {syncing ? 'SYNCING...' : 'SYNC'}
           </button>
           <a href={`/u/${user?.username}`}>
-            <img src={user?.avatar_url || ''} alt={user?.username} style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid var(--border)', cursor: 'pointer', display: 'block' }} />
+            <img src={user?.avatar_url || ''} alt={user?.username} style={{ width: '32px', height: '32px', border: '2px solid var(--neon-cyan)', cursor: 'pointer', display: 'block' }} />
           </a>
-          <button onClick={logout} className="btn-ghost" style={{ fontSize: '13px', padding: '6px 10px' }}>
+          <button onClick={logout} className="btn-pink" style={{ fontSize: '10px', padding: '6px 12px' }}>
             <LogOut size={12} />
           </button>
         </>
       } />
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 32px' }}>
+      <TickerStrip items={tickerItems} />
 
-        <div style={{ marginBottom: '32px', paddingBottom: '24px', borderBottom: '1px solid var(--border)' }}>
-          <h1 style={{ fontSize: '26px', fontWeight: '600', marginBottom: '4px', letterSpacing: '-0.5px' }}>
-            Hey, {user?.name || user?.username}...!
+      <div style={{ maxWidth: '960px', margin: '0 auto', padding: '36px 28px' }}>
+
+        {/* Header */}
+        <div style={{ marginBottom: '32px', borderLeft: '3px solid var(--neon-pink)', paddingLeft: '16px' }}>
+          <div className="pixel-heading pixel-heading-pink" style={{ fontSize: '11px', marginBottom: '6px' }}>
+            DASHBOARD
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: '28px', color: 'var(--text-primary)', letterSpacing: '-0.5px' }}>
+            {user?.name || user?.username}
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>
-            @{user?.username} · Last 30 days · <a href={`/u/${user?.username}`} style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>View public profile →</a>
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden', marginBottom: '16px' }}>
-          {stats.map((s) => (
-            <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} />
-          ))}
-        </div>
-
-        <div className="card" style={{ marginBottom: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <h2 style={{ fontSize: '13px', fontWeight: '500', color: 'var(--text-primary)', letterSpacing: '-0.1px' }}>Commit Activity</h2>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>Last 14 days</span>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            @{user?.username} &nbsp;·&nbsp;
+            <a href={`/u/${user?.username}`} style={{ color: 'var(--neon-cyan)', textDecoration: 'none' }}>PUBLIC PROFILE ↗</a>
           </div>
-          {chartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={120}>
-              <BarChart data={chartData} barSize={12}>
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--text-muted)', fontFamily: 'Geist Mono' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'Geist Mono', fontSize: '11px', color: 'var(--text-primary)' }} labelStyle={{ color: 'var(--text-secondary)' }} itemStyle={{ color: 'var(--text-primary)' }} cursor={{ fill: 'var(--border)' }} />
-                <Bar dataKey="commits" fill="var(--text-secondary)" radius={[3, 3, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : (
-            <p style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '12px', textAlign: 'center', padding: '32px 0' }}>No activity yet. Click Sync to load your data.</p>
-          )}
         </div>
 
-        <div className="card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <Brain size={14} color="var(--text-secondary)" />
-            <span style={{ fontSize: '13px', fontWeight: '500' }}>Weekly AI Insight</span>
-            <span className="badge badge-default" style={{ marginLeft: 'auto', fontSize: '11px' }}>Groq</span>
+        {/* Stats grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', marginBottom: '24px' }}>
+          <StatCard label="Commits" value={activity?.total_commits ?? '—'} icon={<GitCommit size={12} />} color="cyan" />
+          <StatCard label="Pull Requests" value={activity?.total_prs ?? '—'} icon={<GitPullRequest size={12} />} color="pink" />
+          <StatCard label="Streak" value={streak ? `${streak.current_streak}D` : '—'} icon={<Flame size={12} />} color="yellow" />
+          <StatCard label="Best Streak" value={streak ? `${streak.longest_streak}D` : '—'} icon={<BarChart3 size={12} />} color="green" />
+          <StatCard label="Active Days" value={streak?.total_active_days ?? '—'} icon={<Calendar size={12} />} color="cyan" />
+        </div>
+
+        {/* Chart */}
+        <div className="panel panel-cyan" style={{ padding: '20px', marginBottom: '24px' }}>
+          <div className="panel-label">COMMIT ACTIVITY — LAST 14 DAYS</div>
+          <div style={{ paddingTop: '16px' }}>
+            {chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={130}>
+                <BarChart data={chartData} barSize={10}>
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--text-muted)', fontFamily: 'Share Tech Mono' }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: '#050508', border: '1px solid var(--neon-cyan)', fontFamily: 'Share Tech Mono', fontSize: '11px', color: 'var(--neon-cyan)' }} cursor={{ fill: 'rgba(0,245,255,0.05)' }} />
+                  <Bar dataKey="commits" fill="var(--neon-cyan)" radius={[2, 2, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-muted)', textAlign: 'center', padding: '32px 0' }}>
+                {'>'} NO ACTIVITY DATA — RUN SYNC TO LOAD
+              </p>
+            )}
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.7' }}>
-            {insight?.ai_summary || insight?.message || 'Sync your activity first to generate AI insights.'}
-          </p>
-          {insight?.stats && (
-            <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-              {[
-                { label: 'Best Day', value: insight.stats.best_day },
-                { label: 'Commits', value: insight.stats.total_commits },
-                { label: 'Active Days', value: `${insight.stats.active_days}/7` },
-              ].map(item => (
-                <div key={item.label}>
-                  <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '3px' }}>{item.label}</p>
-                  <p style={{ fontSize: '14px', fontWeight: '500', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)' }}>{item.value}</p>
+        </div>
+
+        {/* AI Insight */}
+        <div className="panel panel-pink" style={{ padding: '20px' }}>
+          <div className="panel-label">AI WEEKLY INSIGHT — GROQ</div>
+          <div style={{ paddingTop: '20px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <Brain size={18} color="var(--neon-pink)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ flex: 1 }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.8 }}>
+                {insight?.ai_summary || insight?.message || '> SYNC YOUR ACTIVITY FIRST TO GENERATE AI INSIGHTS.'}
+              </p>
+              {insight?.stats && (
+                <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', gap: '28px', flexWrap: 'wrap' }}>
+                  {[
+                    { label: 'BEST DAY', value: insight.stats.best_day },
+                    { label: 'COMMITS', value: insight.stats.total_commits },
+                    { label: 'ACTIVE', value: `${insight.stats.active_days}/7` },
+                  ].map(item => (
+                    <div key={item.label}>
+                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-muted)', letterSpacing: '0.15em', marginBottom: '4px' }}>{item.label}</p>
+                      <p style={{ fontFamily: 'var(--font-pixel)', fontSize: '12px', color: 'var(--neon-pink)' }}>{item.value}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
+          </div>
         </div>
-
       </div>
     </div>
   )

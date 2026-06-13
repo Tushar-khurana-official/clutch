@@ -19,5 +19,5 @@ export default function AuthenticationCallbackPage() {
     }
   }, [])
 
-  return <LoadingScreen message="Authenticating..." />
+  return <LoadingScreen message="AUTHENTICATING WITH GITHUB..." />
 }
