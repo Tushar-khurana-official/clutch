@@ -1,11 +1,8 @@
-import { GitBranch, Terminal, Zap, Activity } from 'lucide-react'
+import { GitBranch, Terminal, Zap, Activity, ArrowRight } from 'lucide-react'
 import { useAuthentication } from '../hooks/useAuthentication'
 import { Navigate } from 'react-router-dom'
 import NavigationBar from '../components/layout/NavigationBar'
-import TickerStrip from '../components/common/TickerStrip'
 import { API_BASE_URL, GITHUB_REPOSITORY_URL } from '../constants/config.constants'
-
-const TICKER_ITEMS = ['COMMIT STREAKS', 'AI INSIGHTS', 'ACTIVITY HEATMAP', 'GITHUB OAUTH', 'OPEN SOURCE', 'GROQ POWERED', 'WAKATIME COMING SOON']
 
 export default function LandingPage() {
   const { user } = useAuthentication()
@@ -13,63 +10,60 @@ export default function LandingPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
-      <div className="scanlines" />
-
       <NavigationBar rightContent={
         <>
-          <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-yellow" style={{ fontSize: '10px', padding: '6px 14px' }}>★ STAR</a>
-          <a href={`${API_BASE_URL}/auth/github`} className="btn-cyan" style={{ fontSize: '10px', padding: '6px 14px' }}>▶ CONNECT GITHUB</a>
+          <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-brut btn-ghost" style={{ fontSize: '12px', padding: '7px 16px' }}>GitHub</a>
+          <a href={`${API_BASE_URL}/auth/github`} className="btn-brut btn-cyan">
+            <GitBranch size={13} /> Connect GitHub
+          </a>
         </>
       } />
 
-      <TickerStrip items={TICKER_ITEMS} />
-
       {/* HERO */}
-      <main style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0', maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '60px 28px', alignItems: 'center' }}>
+      <main style={{ flex: 1, maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '80px 32px 60px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
 
         {/* LEFT */}
-        <div style={{ paddingRight: '48px' }}>
-          <div className="status-pill status-online" style={{ marginBottom: '24px', display: 'inline-block' }}>SYSTEM ACTIVE</div>
+        <div>
+          <div style={{ marginBottom: '20px' }}>
+            <span className="tag tag-cyan" style={{ marginRight: '8px' }}>Open Source</span>
+            <span className="tag tag-outline">Free Forever</span>
+          </div>
 
-          <h1 className="pixel-heading pixel-heading-cyan" style={{ fontSize: '20px', marginBottom: '8px', lineHeight: 1.8 }}>
-            CLUTCH
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '52px', lineHeight: '1.15', letterSpacing: '-1px', color: 'var(--text-primary)', marginBottom: '20px' }}>
+            Track Your<br />
+            Developer<br />
+            <span style={{ color: 'var(--neon-pink)' }}>Momentum.</span>
           </h1>
-          <h2 className="pixel-heading pixel-heading-pink" style={{ fontSize: '13px', marginBottom: '28px', lineHeight: 1.8 }}>
-            DEV ACTIVITY DASHBOARD
-          </h2>
 
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.8', marginBottom: '32px' }}>
-            {'>'} Track commit streaks<br />
-            {'>'} Visualize your activity<br />
-            {'>'} Get AI-powered weekly insights<br />
-            {'>'} CLI + Web + Open Source
+          <p style={{ fontFamily: 'var(--font-ui)', fontSize: '16px', color: 'var(--text-secondary)', lineHeight: '1.8', marginBottom: '32px', maxWidth: '420px' }}>
+            Commit streaks, activity patterns, and AI-powered weekly insights — all in one place. Know exactly how productive you've been.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <a href={`${API_BASE_URL}/auth/github`} className="btn-cyan">
-              <GitBranch size={13} /> {'>'} CONNECT GITHUB
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '28px' }}>
+            <a href={`${API_BASE_URL}/auth/github`} className="btn-brut btn-cyan">
+              <GitBranch size={14} /> Get Started Free <ArrowRight size={13} />
             </a>
-            <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-pink">
-              <Terminal size={13} /> VIEW SOURCE
+            <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className="btn-brut btn-ghost">
+              View on GitHub
             </a>
           </div>
 
-          <div style={{ marginTop: '32px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
-            $ pip install clutch-dev &nbsp;<span style={{ color: 'var(--neon-green)' }}>✓ FREE FOREVER</span>
-          </div>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-muted)' }}>
+            $ pip install clutch-dev
+          </p>
         </div>
 
-        {/* RIGHT — terminal panel */}
+        {/* RIGHT — terminal */}
         <div className="terminal">
           <div className="terminal-bar">
             <div className="terminal-dot" style={{ background: 'var(--neon-pink)' }} />
             <div className="terminal-dot" style={{ background: 'var(--neon-yellow)' }} />
             <div className="terminal-dot" style={{ background: 'var(--neon-green)' }} />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)', marginLeft: '8px' }}>clutch — terminal</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)', marginLeft: '8px' }}>clutch — terminal</span>
           </div>
           {[
             { type: 'cmd', text: '$ clutch streak' },
-            { type: 'out', text: '◆ Current Streak: 12 days 🔥' },
+            { type: 'out', text: '◆ Current Streak: 12 days' },
             { type: 'out', text: '◆ Longest Streak: 24 days' },
             { type: 'cmd', text: '$ clutch insight' },
             { type: 'out', text: '◆ Strong week — 47 commits' },
@@ -83,56 +77,38 @@ export default function LandingPage() {
               <span className={line.type}>{line.text}</span>
             </div>
           ))}
-          <div className="terminal-line">
-            <span className="cmd">$ <span className="blink">_</span></span>
-          </div>
+          <div className="terminal-line"><span className="cmd">$ <span className="blink">_</span></span></div>
         </div>
       </main>
 
-      <hr className="cyber-divider" style={{ margin: '0 28px' }} />
-
       {/* FEATURES */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '48px 28px' }}>
-        <h3 className="pixel-heading pixel-heading-yellow" style={{ fontSize: '10px', marginBottom: '32px', letterSpacing: '0.2em' }}>// FEATURES</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'var(--border)' }}>
+      <section style={{ maxWidth: '1100px', margin: '0 auto', width: '100%', padding: '0 32px 80px' }}>
+        <div className="section-label">Features</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {[
-            { icon: <Activity size={16} color="var(--neon-cyan)" />, label: 'STREAKS', title: 'Commit Streaks', desc: 'Track daily consistency. Never lose your streak again.', color: 'var(--neon-cyan)' },
-            { icon: <Zap size={16} color="var(--neon-pink)" />, label: 'PATTERNS', title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.', color: 'var(--neon-pink)' },
-            { icon: <Terminal size={16} color="var(--neon-yellow)" />, label: 'AI INSIGHTS', title: 'Weekly Insights', desc: 'AI summaries powered by Groq that actually tell you something.', color: 'var(--neon-yellow)' },
-          ].map((f) => (
-            <div
-              key={f.label}
-              className="panel"
-              style={{ padding: '24px', borderColor: 'var(--border)', background: 'var(--bg-card)', transition: 'transform 0.2s cubic-bezier(.22,.68,0,1.2), box-shadow 0.2s ease', cursor: 'default' }}
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.transform = 'perspective(700px) rotateX(-5deg) rotateY(3deg) translateY(-6px) scale(1.02)'
-                el.style.boxShadow = `0 16px 40px rgba(0,0,0,0.55), 0 0 20px ${f.color}22`
-                el.style.borderColor = f.color
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0) scale(1)'
-                el.style.boxShadow = 'none'
-                el.style.borderColor = 'var(--border)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                {f.icon}
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: f.color, letterSpacing: '0.12em' }}>{f.label}</span>
+            { icon: <Activity size={18} />, label: 'STREAKS', title: 'Commit Streaks', desc: 'Track daily consistency. Never lose your streak again.', color: 'cyan' as const },
+            { icon: <Zap size={18} />, label: 'PATTERNS', title: 'Activity Patterns', desc: 'Discover your most productive days, repos and languages.', color: 'pink' as const },
+            { icon: <Terminal size={18} />, label: 'AI', title: 'Weekly Insights', desc: 'Groq-powered summaries that actually tell you something useful.', color: 'yellow' as const },
+          ].map((f) => {
+            const accentMap = { cyan: 'var(--neon-cyan)', pink: 'var(--neon-pink)', yellow: 'var(--neon-yellow)' }
+            const accent = accentMap[f.color]
+            return (
+              <div key={f.label} className="brut-card" style={{ padding: '24px', borderColor: accent, boxShadow: `6px 6px 0px ${accent}` }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                  <span style={{ color: accent }}>{f.icon}</span>
+                  <span className="tag" style={{ background: accent, color: '#0c0c0e', fontSize: '10px', padding: '2px 8px' }}>{f.label}</span>
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', marginBottom: '8px', color: 'var(--text-primary)' }}>{f.title}</h3>
+                <p style={{ fontFamily: 'var(--font-ui)', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.7' }}>{f.desc}</p>
               </div>
-              <h4 style={{ fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: '16px', marginBottom: '8px', color: 'var(--text-primary)' }}>{f.title}</h4>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.8 }}>{f.desc}</p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 
-      <TickerStrip items={['OPEN SOURCE', 'MIT LICENSE', 'SELF HOSTABLE', 'FASTAPI BACKEND', 'REACT FRONTEND', 'TYPER CLI', 'GROQ AI']} />
-
-      <footer style={{ borderTop: '1px solid var(--border)', padding: '16px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>© 2026 CLUTCH — OPEN SOURCE</span>
-        <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--neon-cyan)', textDecoration: 'none' }}>GITHUB ↗</a>
+      <footer style={{ borderTop: '2px solid var(--border-dim)', padding: '18px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--text-muted)' }}>© 2026 Clutch — Open Source</span>
+        <a href={GITHUB_REPOSITORY_URL} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--neon-cyan)', textDecoration: 'none' }}>Star on GitHub ★</a>
       </footer>
     </div>
   )

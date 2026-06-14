@@ -17,7 +17,7 @@ export default function AuthenticationCallbackPage() {
     } else {
       navigate('/', { replace: true })
     }
-  }, [])
+  }, [login, navigate, params])
 
-  return <LoadingScreen message="AUTHENTICATING WITH GITHUB..." />
+  return <LoadingScreen message="Authenticating with GitHub..." />
 }
