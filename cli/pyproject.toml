@@ -3,9 +3,10 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "clutch-dev"
+name = "clutch-cli"
 version = "0.2.0"
 description = "GitHub tracks your work. Clutch tracks you."
+readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Lay Patel", email = "lay.patel.1313@gmail.com" }]
 requires-python = ">=3.11"

@@ -79,7 +79,7 @@
 </td>
 <td align="center" width="33%">
 <h3>⚡ CLI First</h3>
-<p>A powerful terminal companion (<code>clutch-dev</code>) for instant access to streaks, stats, and insights.</p>
+<p>A powerful terminal companion (<code>clutch-cli</code>) for instant access to streaks, stats, and insights.</p>
 </td>
 </tr>
 <tr>
@@ -260,29 +260,46 @@ The frontend will run at `http://localhost:5173`.
 
 ### 4. CLI Setup
 
-> **Note**: The CLI is currently in development and must be installed locally from source.
+```bash
+pip install clutch-cli
+```
+
+Or install locally from source:
 
 ```bash
 cd cli
-```
-```bash
 pip install -e .
 ```
-```nash
-export CLUTCH_API_URL=http://localhost:8000
-```
 
-**Authentication Flow**:
-Run the following command to begin:
+**Login** (fully automatic — no token copy-pasting):
+
 ```bash
 clutch auth login
 ```
-You will be prompted for a JWT token. To retrieve your token:
-1.  Navigate to your live dashboard after logging in via the web.
-2.  The JWT token is present in the URL: `https://clutch-laypatel.netlify.app/auth/callback?token=...`
-3.  Alternatively, open the browser console (`Cmd+Opt+J` on Mac or `Ctrl+Shift+J` on Windows) while on the callback page to find the token.
 
-Paste the token back into your terminal to complete the login.
+Your browser opens, you authorize on GitHub, and the terminal automatically captures the token. Done.
+
+To point the CLI at a local backend instead of the hosted API:
+
+```bash
+export CLUTCH_API_URL=http://localhost:8000
+clutch auth login
+```
+
+**Available Commands**:
+
+| Command | Description |
+|---|---|
+| `clutch auth login` | Login via GitHub OAuth (automatic) |
+| `clutch auth logout` | Logout and clear credentials |
+| `clutch auth whoami` | Show logged-in user |
+| `clutch streak` | Current and longest commit streak |
+| `clutch stats [--days N]` | Activity stats for last N days |
+| `clutch repos` | Most recently active repositories |
+| `clutch insight` | AI-generated weekly insight |
+| `clutch patterns` | Coding patterns and habits |
+| `clutch status` | Login status and API health |
+| `clutch --version` | Show CLI version |
 
 ---
 
@@ -356,18 +373,20 @@ clutch/
 │   ├── package.json
 │   └── .env.example
 │
-└── cli/                            # Typer CLI tool
+└── cli/                            # Typer CLI tool (published as clutch-cli on PyPI)
     ├── clutch_cli/
-    │   ├── main.py                 # CLI entry point, registers all commands
+    │   ├── main.py                 # CLI entry point, registers all commands, --version flag
     │   ├── config.py               # Token storage in ~/.clutch/config.json
     │   ├── api.py                  # Authenticated HTTP client
-    │   ├── auth.py                 # login, logout, whoami commands
+    │   ├── auth.py                 # login (auto OAuth), logout, whoami commands
     │   ├── streak.py               # clutch streak command
     │   ├── stats.py                # clutch stats command
     │   ├── insight.py              # clutch insight command
     │   ├── repos.py                # clutch repos command
-    │   └── patterns.py             # clutch patterns command
-    └── setup.py
+    │   ├── patterns.py             # clutch patterns command
+    │   └── status.py               # clutch status command
+    ├── README.md                   # PyPI package description
+    └── pyproject.toml              # Modern build config
 ```
 
 ---
